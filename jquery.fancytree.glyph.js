@@ -1,16 +1,16 @@
 /*!
  * jquery.fancytree.glyph.js
  *
- * Use glyph fonts as instead of icon sprites.
+ * Use glyph-fonts, ligature-fonts, or SVG icons instead of icon sprites.
  * (Extension module for jquery.fancytree.js: https://github.com/mar10/fancytree/)
  *
- * Copyright (c) 2008-2017, Martin Wendt (http://wwWendt.de)
+ * Copyright (c) 2008-2018, Martin Wendt (http://wwWendt.de)
  *
  * Released under the MIT license
  * https://github.com/mar10/fancytree/wiki/LicenseInfo
  *
- * @version @VERSION
- * @date @DATE
+ * @version 2.28.1
+ * @date 2018-03-19T06:47:37Z
  */
 
 ;(function( factory ) {
@@ -28,190 +28,167 @@
 
 }( function( $ ) {
 
-    "use strict";
+"use strict";
 
-    /* *****************************************************************************
-     * Private functions and variables
-     */
+/* *****************************************************************************
+ * Private functions and variables
+ */
 
-    var FT = $.ui.fancytree,
-        PRESETS = {
-            "awesome3": {  // Outdated!
-                _addClass: "",
-                checkbox: "icon-check-empty",
-                checkboxSelected: "icon-check",
-                checkboxUnknown: "icon-check icon-muted",
-                dragHelper: "icon-caret-right",
-                dropMarker: "icon-caret-right",
-                error: "icon-exclamation-sign",
-                expanderClosed: "icon-caret-right",
-                expanderLazy: "icon-angle-right",
-                expanderOpen: "icon-caret-down",
-                loading: "icon-refresh icon-spin",
-                nodata: "icon-meh",
-                noExpander: "",
-                radio: "icon-circle-blank",
-                radioSelected: "icon-circle",
-                // radioUnknown: "icon-circle icon-muted",
-                // Default node icons.
-                // (Use tree.options.icon callback to define custom icons based on node data)
-                doc: "icon-file-alt",
-                docOpen: "icon-file-alt",
-                folder: "icon-folder-close-alt",
-                folderOpen: "icon-folder-open-alt"
-            },
-            "awesome4": {
-                _addClass: "fa",
-                checkbox: "fa-square-o",
-                checkboxSelected: "fa-check-square-o",
-                checkboxUnknown: "fa-square",
-                dragHelper: "fa-arrow-right",
-                dropMarker: "fa-long-arrow-right",
-                error: "fa-warning",
-                expanderClosed: "fa-caret-right",
-                expanderLazy: "fa-angle-right",
-                expanderOpen: "fa-caret-down",
-                loading: "fa-spinner fa-pulse",
-                nodata: "fa-meh-o",
-                noExpander: "",
-                radio: "fa-circle-thin",  // "fa-circle-o"
-                radioSelected: "fa-circle",
-                // radioUnknown: "fa-dot-circle-o",
-                // Default node icons.
-                // (Use tree.options.icon callback to define custom icons based on node data)
-                doc: "fa-file-o",
-                docOpen: "fa-file-o",
-                folder: "fa-folder-o",
-                folderOpen: "fa-folder-open-o"
-            },
-            "awesome5": {
-                // fontawesome 5 have several different base classes
-                // "far, fas, fal and fab" The rendered svg puts that prefix
-                // in a different location so we have to keep them separate here
-                _addClass: "",
-                // If SVG/JavaScript version, as recommended by Font Awesome web site,
-                // it needs to go in a container element since the element may be "consumed"
-                // depending on settings. 
-                _container : '<span class="fancytree-icon-container"></span>',
-                checkbox: "<i class='far fa-square'></i>",
-                checkboxSelected: "far fa-check-square",
-                // checkboxUnknown: "far fa-window-close",
-                checkboxUnknown: "fas fa-square",
-                radio: "far fa-circle",
-                radioSelected: "fas fa-circle",
-                radioUnknown: "far fa-dot-circle",
-                dragHelper: "fas fa-arrow-right",
-                dropMarker: "fas fa-long-arrow-right",
-                error: "fas fa-exclamation-triangle",
-                expanderClosed: "fas fa-caret-right",
-                expanderLazy: "fas fa-angle-right",
-                expanderOpen: "fas fa-caret-down",
-                loading: "fas fa-spinner fa-pulse",
-                nodata: "far fa-meh",
-                noExpander: "",
-                // Default node icons.
-                // (Use tree.options.icon callback to define custom icons based on node data)
-                doc: "far fa-file",
-                docOpen: "far fa-file",
-                folder: "far fa-folder",
-                folderOpen: "far fa-folder-open"
-            },
-            "bootstrap3": {
-                _addClass: "glyphicon",
-                checkbox: "glyphicon-unchecked",
-                checkboxSelected: "glyphicon-check",
-                checkboxUnknown: "glyphicon-expand",  // "glyphicon-share",
-                dragHelper: "glyphicon-play",
-                dropMarker: "glyphicon-arrow-right",
-                error: "glyphicon-warning-sign",
-                expanderClosed: "glyphicon-menu-right",  // glyphicon-plus-sign
-                expanderLazy: "glyphicon-menu-right",  // glyphicon-plus-sign
-                expanderOpen: "glyphicon-menu-down",  // glyphicon-minus-sign
-                loading: "glyphicon-refresh glyphicon-spin",
-                nodata: "glyphicon-info-sign",
-                noExpander: "",
-                radio: "glyphicon-remove-circle",  // "glyphicon-unchecked",
-                radioSelected: "glyphicon-ok-circle",  // "glyphicon-check",
-                // radioUnknown: "glyphicon-ban-circle",
-                // Default node icons.
-                // (Use tree.options.icon callback to define custom icons based on node data)
-                doc: "glyphicon-file",
-                docOpen: "glyphicon-file",
-                folder: "glyphicon-folder-close",
-                folderOpen: "glyphicon-folder-open"
-            },
-            "material": {
-                _addClass: "material-icons",
-                checkbox: { text: "check_box_outline_blank" },
-                checkboxSelected: { text: "check_box" },
-                checkboxUnknown: { text: "indeterminate_check_box" },
-                dragHelper: { text: "play_arrow" },
-                dropMarker: { text: "arrow-forward" },
-                error: { text: "warning" },
-                expanderClosed: { text: "chevron_right" },
-                expanderLazy: { text: "last_page" },
-                expanderOpen: { text: "expand_more" },
-                loading: { text: "autorenew", addClass: "glyphicon-spin" },
-                nodata: { text: "info" },
-                noExpander: { text: "" },
-                radio: { text: "radio_button_unchecked" },
-                radioSelected: { text: "radio_button_checked" },
-                // Default node icons.
-                // (Use tree.options.icon callback to define custom icons based on node data)
-                doc: { text: "insert_drive_file" },
-                docOpen: { text: "insert_drive_file" },
-                folder: { text: "folder" },
-                folderOpen: { text: "folder_open" }
-            }
-        };
+var FT = $.ui.fancytree,
+	PRESETS = {
+		"awesome3": {  // Outdated!
+			_addClass: "",
+			checkbox: "icon-check-empty",
+			checkboxSelected: "icon-check",
+			checkboxUnknown: "icon-check icon-muted",
+			dragHelper: "icon-caret-right",
+			dropMarker: "icon-caret-right",
+			error: "icon-exclamation-sign",
+			expanderClosed: "icon-caret-right",
+			expanderLazy: "icon-angle-right",
+			expanderOpen: "icon-caret-down",
+			loading: "icon-refresh icon-spin",
+			nodata: "icon-meh",
+			noExpander: "",
+			radio: "icon-circle-blank",
+			radioSelected: "icon-circle",
+			// radioUnknown: "icon-circle icon-muted",
+			// Default node icons.
+			// (Use tree.options.icon callback to define custom icons based on node data)
+			doc: "icon-file-alt",
+			docOpen: "icon-file-alt",
+			folder: "icon-folder-close-alt",
+			folderOpen: "icon-folder-open-alt"
+			},
+		"awesome4": {
+			_addClass: "fa",
+			checkbox: "fa-square-o",
+			checkboxSelected: "fa-check-square-o",
+			checkboxUnknown: "fa-square fancytree-helper-indeterminate-cb",
+			dragHelper: "fa-arrow-right",
+			dropMarker: "fa-long-arrow-right",
+			error: "fa-warning",
+			expanderClosed: "fa-caret-right",
+			expanderLazy: "fa-angle-right",
+			expanderOpen: "fa-caret-down",
+			// We may prevent wobbling rotations on FF by creating a separate sub element:
+			loading: {html: "<span class='fa fa-spinner fa-pulse' />"},
+			nodata: "fa-meh-o",
+			noExpander: "",
+			radio: "fa-circle-thin",  // "fa-circle-o"
+			radioSelected: "fa-circle",
+			// radioUnknown: "fa-dot-circle-o",
+			// Default node icons.
+			// (Use tree.options.icon callback to define custom icons based on node data)
+			doc: "fa-file-o",
+			docOpen: "fa-file-o",
+			folder: "fa-folder-o",
+			folderOpen: "fa-folder-open-o"
+			},
+		"awesome5": {
+			// fontawesome 5 have several different base classes
+			// "far, fas, fal and fab" The rendered svg puts that prefix
+			// in a different location so we have to keep them separate here
+			_addClass: "",
+			checkbox: "far fa-square",
+			checkboxSelected: "far fa-check-square",
+			// checkboxUnknown: "far fa-window-close",
+			checkboxUnknown: "fas fa-square fancytree-helper-indeterminate-cb",
+			radio: "far fa-circle",
+			radioSelected: "fas fa-circle",
+			radioUnknown: "far fa-dot-circle",
+			dragHelper: "fas fa-arrow-right",
+			dropMarker: "fas fa-long-arrow-right",
+			error: "fas fa-exclamation-triangle",
+			expanderClosed: "fas fa-caret-right",
+			expanderLazy: "fas fa-angle-right",
+			expanderOpen: "fas fa-caret-down",
+			loading: "fas fa-spinner fa-pulse",
+			nodata: "far fa-meh",
+			noExpander: "",
+			// Default node icons.
+			// (Use tree.options.icon callback to define custom icons based on node data)
+			doc: "far fa-file",
+			docOpen: "far fa-file",
+			folder: "far fa-folder",
+			folderOpen: "far fa-folder-open"
+			},
+		"bootstrap3": {
+			_addClass: "glyphicon",
+			checkbox: "glyphicon-unchecked",
+			checkboxSelected: "glyphicon-check",
+			checkboxUnknown: "glyphicon-expand fancytree-helper-indeterminate-cb",  // "glyphicon-share",
+			dragHelper: "glyphicon-play",
+			dropMarker: "glyphicon-arrow-right",
+			error: "glyphicon-warning-sign",
+			expanderClosed: "glyphicon-menu-right",  // glyphicon-plus-sign
+			expanderLazy: "glyphicon-menu-right",  // glyphicon-plus-sign
+			expanderOpen: "glyphicon-menu-down",  // glyphicon-minus-sign
+			loading: "glyphicon-refresh fancytree-helper-spin",
+			nodata: "glyphicon-info-sign",
+			noExpander: "",
+			radio: "glyphicon-remove-circle",  // "glyphicon-unchecked",
+			radioSelected: "glyphicon-ok-circle",  // "glyphicon-check",
+			// radioUnknown: "glyphicon-ban-circle",
+			// Default node icons.
+			// (Use tree.options.icon callback to define custom icons based on node data)
+			doc: "glyphicon-file",
+			docOpen: "glyphicon-file",
+			folder: "glyphicon-folder-close",
+			folderOpen: "glyphicon-folder-open"
+			},
+		"material": {
+			_addClass: "material-icons",
+			checkbox: { text: "check_box_outline_blank" },
+			checkboxSelected: { text: "check_box" },
+			checkboxUnknown: { text: "indeterminate_check_box" },
+			dragHelper: { text: "play_arrow" },
+			dropMarker: { text: "arrow-forward" },
+			error: { text: "warning" },
+			expanderClosed: { text: "chevron_right" },
+			expanderLazy: { text: "last_page" },
+			expanderOpen: { text: "expand_more" },
+			loading: { text: "autorenew", addClass: "fancytree-helper-spin" },
+			nodata: { text: "info" },
+			noExpander: { text: "" },
+			radio: { text: "radio_button_unchecked" },
+			radioSelected: { text: "radio_button_checked" },
+			// Default node icons.
+			// (Use tree.options.icon callback to define custom icons based on node data)
+			doc: { text: "insert_drive_file" },
+			docOpen: { text: "insert_drive_file" },
+			folder: { text: "folder" },
+			folderOpen: { text: "folder_open" }
+			}
+	};
 
-    
-    function setIcon(span, baseClass, opts, type) {
-     
-        var map = opts.map, className,
-            icon = map[type],
-            $span = $(span),
-            setClass = baseClass + " " + (map._addClass || "");
-        // remove the container element if it is used
-        $span.find(">.familytree-icon-container").remove();
-   
-        // added callback for the ability to have conditional icons.
-        if ($.isFunction(icon)) {
-            className = icon.call(this);
-        }
-        else {
-            className = icon;
-        }
-        // If Font Awesome 5 with the FontAwesome api and svg/javascript is being used,
-        // icons must goin in a container to prevent FA5 from breaking Family Tree.
-        if (opts.preset === "awesome5" && typeof (FontAwesome) === "object") {
-            if (!/<[a-z][\s\S]*>/i.test(className)) {
-                 className = '<i class="' + className + '"></i>';
-            }
-            $span.prepend('<span class="familytree-icon-container">' + className + '</span>');
-        }
-        else if (typeof className === "string") {
-            // if a fully form tag is included, put it in a tag container and append it.
-            if (/<[a-z][\s\S]*>/i.test(className)) {
-                $span.prepend('<span class="familytree-icon-container">' + className + '</span>');
-            }
-            else {
-                // otherwise just add the class
-                $span.attr("class", setClass + " " + className);
-            }
-        } else {
-            if (className.text) {
-                $span.text("" + className.text);
-            }
-            $span.attr("class", setClass + " " + (className.addClass || ""));
-        }
-    }
 
+function setIcon( span, baseClass, opts, type, node ) {
+	var map = opts.map,
+		icon = map[ type ],
+		$span = $( span ),
+		setClass = baseClass + " " + (map._addClass || "");
+	if ($.isFunction(icon)) {
+	    $span.attr("class", setClass + " " +  icon.call(this, span, node));
+	}
+	else if( typeof icon === "string" ) {
+		$span.attr( "class", setClass + " " + icon );
+	} else if ( icon ) {
+		if( icon.text ) {
+			// $span.text( "" + icon.text );
+			span.textContent = "" + icon.text;
+		} else if ( icon.html ) {
+			// $(span).append($(icon.html));
+			span.innerHTML = icon.html;
+		}
+		$span.attr( "class", setClass + " " + ( icon.addClass || "" ) );
+	}
+}
 
 
 $.ui.fancytree.registerExtension({
 	name: "glyph",
-	version: "@VERSION",
+	version: "2.28.1",
 	// Default options for this extension.
 	options: {
 		preset: null,  // 'awesome3', 'awesome4', 'bootstrap3', 'material'
@@ -258,7 +235,7 @@ $.ui.fancytree.registerExtension({
 				icon = "noExpander";
 			}
 			// span.className = "fancytree-expander " + map[icon];
-			setIcon( span, "fancytree-expander", opts, icon );
+			setIcon( span, "fancytree-expander", opts, icon, node );
 		}
 
 		if( node.tr ){
@@ -270,11 +247,11 @@ $.ui.fancytree.registerExtension({
 			checkbox = FT.evalOption("checkbox", node, node, opts, false);
 			if( (node.parent && node.parent.radiogroup ) || checkbox === "radio" ) {
 				icon = node.selected ? "radioSelected" : "radio";
-				setIcon( span, "fancytree-checkbox fancytree-radio", opts, icon );
+				setIcon( span, "fancytree-checkbox fancytree-radio", opts, icon, node );
 			} else {
 				icon = node.selected ? "checkboxSelected" : (node.partsel ? "checkboxUnknown" : "checkbox");
 				// span.className = "fancytree-checkbox " + map[icon];
-				setIcon( span, "fancytree-checkbox", opts, icon );
+				setIcon( span, "fancytree-checkbox", opts, icon, node );
 			}
 		}
 
@@ -289,7 +266,7 @@ $.ui.fancytree.registerExtension({
 			}else{
 				icon = node.expanded ? "docOpen" : "doc";
 			}
-			setIcon( span, "fancytree-icon", opts, icon );
+			setIcon( span, "fancytree-icon", opts, icon, node );
 		}
 		return res;
 	},
@@ -304,13 +281,13 @@ $.ui.fancytree.registerExtension({
 			if(node.parent){
 				span = $("span.fancytree-expander", node.span).get(0);
 				if( span ) {
-					setIcon( span, "fancytree-expander", opts, status );
+					setIcon( span, "fancytree-expander", opts, status, node );
 				}
 			}else{ //
 				span = $(".fancytree-statusnode-" + status, node[this.nodeContainerAttrName])
 					.find("span.fancytree-icon").get(0);
 				if( span ) {
-					setIcon( span, "fancytree-icon", opts, status );
+					setIcon( span, "fancytree-icon", opts, status, node );
 				}
 			}
 		}
